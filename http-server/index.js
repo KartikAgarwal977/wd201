@@ -38,7 +38,7 @@ http.createServer((req, res) => {
       res.write(ProjectContent)
       res.end()
       break
-    case '/registration.html':
+    case '/registration':
       res.write(RegistrationContent)
       res.end()
       break
