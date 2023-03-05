@@ -1,73 +1,49 @@
-// const http = require("http");
-// const fs = require("fs");
-// fs.readFile("home.html",(err,home)=>{
-//     console.log(home.toString());
+const args = require('minimist')(process.argv.slice(2))
+const a = parseInt(args.port)
+const http = require('http')
+const fs = require('fs')
+// fs.readFile("home.html", (err, home) => {
+//     // console.log(home.toString()); //for home.html data on console
+//     // Now render the data to server
+//     if (err) throw err;
+//     http.createServer((req, res) => {
+//         res.writeHeader(200, { "content-type": "text/html" });// writeHeader write the content as it is in html.
+//         res.write(home);
+//         res.end();
+//     }).listen(3000);
 // });
 
-// fs.readFile("home.html",(err,home)=>{
-//     if(err){
-//         throw err;
-//     }
-//     http
-//         .createServer((request,response)=>{
-//             response.writeHeader(200,{"content-type":"text/html"});
-//             response.write(home);
-//             response.end();
-//         })
-//         .listen(3000);
-// });
-
-
-// But clicking on the Projects link doesn't take you anywhere and the browser shows a different URL but nothing loads. Let us fix that.
-// To achieve this, we will read both the files and store their contents in a variable.
-
-const http = require("http");
-const fs = require("fs");
-
-let homeContent = "";
-let projectContent = "";
-let registrationContent = "";
-
-fs.readFile("home.html",(err,home)=>{
-    if(err){
-        throw err;
-    }
-    homeContent = home;
-});
-
-fs.readFile("project.html",(err,project)=>{
-    if(err){
-        throw err;
-    }
-    projectContent=project;
-});
-
-fs.readFile("registration.html",(err,registration)=>{
-    if(err){
-        throw err;
-    }
-    registrationContent = registration;
+/// ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+let ProjectContent = ''
+let HomeContent = ''
+let RegistrationContent = ''
+fs.readFile('home.html', (err, home) => {
+  if (err) throw err
+  HomeContent = home
+})
+fs.readFile('project.html', (err, project) => {
+  if (err) throw err
+  ProjectContent = project
+})
+fs.readFile('registration.html', (err, registration) => {
+  if (err) throw err
+  RegistrationContent = registration
 })
 
-http
-    .createServer((request,response)=>{
-        let url = request.url;
-        response.writeHeader(200,{"Content-Type":"text/html"});
-        switch(url){
-            case "/project":
-                response.write(projectContent);
-                response.end();
-                break;
-
-            case "/registration":
-                response.write(registrationContent);
-                response.end();
-                break;
-
-            default:
-                response.write(homeContent);
-                response.end();
-                break;
-        }
-    })
-    .listen(5000);
+http.createServer((req, res) => {
+  const url = req.url
+  res.writeHeader(200, { 'content-type': 'text/html' })
+  switch (url) {
+    case '/project':
+      res.write(ProjectContent)
+      res.end()
+      break
+    case '/registration.html':
+      res.write(RegistrationContent)
+      res.end()
+      break
+    default:
+      res.write(HomeContent)
+      res.end()
+  }
+}).listen(a)
