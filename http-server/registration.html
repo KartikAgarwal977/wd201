@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>name form</title>
+    <link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+    <div class="center">
+        <h1>Registeration Form</h1>
+        <form id = "form">
+            <div class = "textfield">
+                <label for="name">Name</label>
+                <input required type="name" name="name" id="name">
+            </div>
+            <div class = "textfield">
+                <label for="email">Email</label>
+                <input required type="email" name="email" id="email">
+            </div>
+            <div class = "textfield">
+                <label for="password">Password</label>
+                <input required type="password" name="password" id="password">
+            </div>
+            <div class = "textfield">
+                <label for="dob">DOB</label>
+                <input required type="date" name = "dob" id="dob">
+            </div>
+            <div class = "textfields">
+                <input required type="checkbox" id="checkbox">
+                <label for="checkbox">Accept terms and condition</label>
+            </div><div id="submit_button">
+
+                <button class="submit_button" type="submit">Submit</button>
+            </div>
+
+        </form>
+        <div class="entries">
+            <h2>Entries</h2>
+            <table class="table" id="user-table">
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Password</th>
+                    <th>DOB</th>
+                    <th>Accept condition</th>
+
+                </tr>
+            </td>
+        </div>
+    </div>
+     <script src="index.js"></script> 
+</body>
+</html>
