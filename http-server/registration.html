@@ -1,56 +1,45 @@
-<!DOCTYPE html>
-<html lang="en">
+<!Doctype html>
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>name form</title>
-    <link rel="stylesheet" href="style.css">
-
+	<link rel="stylesheet" href="style.css">
+	<title>Form</title>
 </head>
 <body>
-    <div class="center">
-        <h2>Registeration Form</h2>
-        <form id = "form">
-            <div class = "textfield">
-                <label for="name">Name</label>
-                <input required type="name" name="name" id="name">
-            </div>
-            <div class = "textfield">
-                <label for="email">Email</label>
-                <input required type="email" name="email" id="email">
-            </div>
-            <div class = "textfield">
-                <label for="password">Password</label>
-                <input required type="password" name="password" id="password">
-            </div>
-            <div class = "textfield">
-                <label for="dob">DOB</label>
-                <input required type="date" name = "dob" id="dob">
-            </div>
-            <div class = "textfields">
-                <input required type="checkbox" id="checkbox">
-                <label for="checkbox">Accept terms and condition</label>
-            </div><div id="submit_button">
+	<div class="center">
+		<h1>Registration Form</h1>
+		<form id="form">
+		<label for="name">Name:</label>
+		<input type="text" id="name" name="name" required><br><br>
 
-                <button class="submit_button" type="submit">Submit</button>
-            </div>
+		<label for="email">Email:</label>
+		<input type="email" id="email" name="email" required><br><br>
 
-        </form>
-        <div class="entries">
-            <h2>Entries</h2>
-            <table class="table" id="user-table">
-                <tr>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Password</th>
-                    <th>DOB</th>
-                    <th>Accept condition</th>
+		<label for="password">Password:</label>
+		<input type="password" id="password" name="password" required><br><br>
 
-                </tr>
-            </td>
-        </div>
+		<label for="dob">Date of Birth:</label>
+		<input type="date" id="dob" name="dob" required><br><br>
+
+		<input type="checkbox" id="terms" name="terms" required>
+		<label for="terms">I accept the terms and conditions</label><br><br>
+
+		<button type="submit">Submit</button>
+	</form>
+	<div class="entries">
+		<h2>Entries</h2>
+	<table id="user-table">
+		<thead>
+			<tr>
+				<th>Name</th>
+				<th>Email</th>
+				<th>Password</th>
+				<th>Dob</th>
+				<th>Accepted terms And conditions</th>
+			</tr>
+		</thead>
+	</table>
     </div>
-     <script src="index.js"></script> 
+	</div>
+	<script src="index.js"></script>
 </body>
 </html>
