@@ -3,4 +3,4 @@
 
 npx pretty-quick --staged
 npx lint-staged
-npm test
+cd todo-cli && npm test
