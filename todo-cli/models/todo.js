@@ -89,10 +89,11 @@ module.exports = (sequelize, DataTypes) => {
     }
 
     displayableString() {
-      let today_checker = new Date(this.dueDate)
       let checkbox = this.completed ? "[x]" : "[ ]";
-      return today_checker.getDate() === new Date().getDate() ?
-      `${this.id}. ${checkbox}  ${this.title} `: new Date`${this.id}. ${checkbox} ${this.title} ${this.dueDate}`;
+      const today_checker = new Date(this.dueDate);
+      return today_checker.getDate() === new Date().getDate()
+        ? `${this.id}. ${checkbox} ${this.title}`.trim()
+        : `${this.id}. ${checkbox} ${this.title} ${this.dueDate}`.trim();
     }
   }
   Todos.init({
