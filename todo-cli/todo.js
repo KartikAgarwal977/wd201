@@ -16,21 +16,21 @@ const todoList = () => {
   const overdue = () => {
     // Write the date check condition here and return the array
     // of overdue items accordingly.
-    let list = all.filter(i=>i.dueDate<today)
+    let list = all.filter((i) => i.dueDate < today);
     return list;
   };
 
   const dueToday = () => {
     // Write the date check condition here and return the array
     // of todo items that are due today accordingly.
-    let list = all.filter(i=>i.dueDate===today)
+    let list = all.filter((i) => i.dueDate === today);
     return list;
   };
 
   const dueLater = () => {
     // Write the date check condition here and return the array
     // of todo items that are due later accordingly.
-    let list = all.filter(i=>i.dueDate>today)
+    let list = all.filter((i) => i.dueDate > today);
     return list;
   };
 
@@ -40,9 +40,9 @@ const todoList = () => {
     const display = (item) => {
       let displaymark = item.completed ? "[x]" : "[ ]";
       let displaydate = item.dueDate === today ? "" : item.dueDate;
-      return [displaymark,item.title,displaydate].join(' ')
-    }
-    return list.map(display).join('\n')
+      return [displaymark, item.title, displaydate].join(" ");
+    };
+    return list.map(display).join("\n");
   };
   return {
     all,
