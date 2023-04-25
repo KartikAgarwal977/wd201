@@ -46,7 +46,7 @@ module.exports = (sequelize, DataTypes) => {
 
           }
         },
-        order:[['id','ASC']],
+        order: [['id', 'ASC']],
       })
       return overdue
     }
@@ -60,7 +60,7 @@ module.exports = (sequelize, DataTypes) => {
 
           }
         },
-        order:[['id','ASC']],
+        order: [['id', 'ASC']],
       })
       return dueToday
     }
@@ -74,7 +74,7 @@ module.exports = (sequelize, DataTypes) => {
 
           }
         },
-        order:[['id','ASC']],
+        order: [['id', 'ASC']],
       })
       return dueLater
     }
@@ -84,6 +84,13 @@ module.exports = (sequelize, DataTypes) => {
       await Todos.update({ completed: true }, {
         where: {
           id: id,
+        }
+      })
+    }
+    static async delete(id) {
+      await Todos.destroy({
+        where: {
+          id: id
         }
       })
     }
