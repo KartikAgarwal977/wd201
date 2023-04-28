@@ -17,6 +17,9 @@ module.exports = (sequelize, DataTypes) => {
     markAsCompleted() {
       return this.update({ completed: true });
     }
+    static async getTodo() {
+      return await this.findAll()
+    }
   }
   todos.init(
     {

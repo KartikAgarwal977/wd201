@@ -3,19 +3,26 @@ const app = express();
 const bodyParser = require("body-parser");
 app.use(bodyParser.json());
 const { todos } = require("./models");
+const path = require('path')
+
+app.set("view engine", 'ejs')
+
 
 app.get("/", async (request, response) => {
   const allTodos = await todos.getTodo();
-  if (request.accpects("html")) {
+  if (request.accepts("html")) {
     response.render("index", {
       allTodos,
     });
   } else {
     response.json({
-      allTodos,
+      allTodos
     });
   }
 });
+
+app.use(express.static(path.join(__dirname,'public')))
+
 app.get("/todos", async (request, response) => {
   try {
     const Todo = await todos.findAll({ order: [["id", "ASC"]] });
