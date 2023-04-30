@@ -45,7 +45,9 @@ module.exports = (sequelize, DataTypes) => {
         order:[['id', 'ASC']]
       })
     }
-    
+    static async remove(id) {
+      return await this.destroy({ where: { id } })
+    }
   }
   todos.init(
     {

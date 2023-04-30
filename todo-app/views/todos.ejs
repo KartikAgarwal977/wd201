@@ -3,11 +3,10 @@
 
         <div class="flex-auto">
             <input type="text" placeholder="What's next?" name="title"
-                class="border border-gray-300 rounded p-2 text-gray-900 w-full text-sm"
-                required />
+                class="border border-gray-300 rounded p-2 text-gray-900 w-full text-sm" required />
         </div>
         <div class="flex-auto">
-            <input type="date" name="dueDate" class="border border-grey-300 rounded p-2 w-full"/>
+            <input type="date" name="dueDate" class="border border-grey-300 rounded p-2 w-full" />
         </div>
         <div class="flex-none">
             <button type="submit"
@@ -17,61 +16,66 @@
 </form>
 <div class="flex items-center">
     <h5>Overdue</h5>
-    <p id = 'count-overdue' class="bg-gray-200 inline p-1 mx-2 my-1 rounded">
+    <p id='count-overdue' class="bg-gray-200 inline p-1 mx-2 my-1 rounded">
         <%= Overdue.length %>
     </p>
 </div>
 <ul class="list-none">
-    <% for (var i = 0; i< Overdue.length ; i++) { %>
+    <% for (var i=0; i< Overdue.length ; i++) { %>
         <li class="todos-item">
             <div class="flex w-fit items-center px-2 py-1  my-2 rounded hover:bg-purple-100">
-                <%  let id = Overdue[i].id; %>
-                <input type="checkbox"  id= "checkbox-Overdue-<%= Overdue[i].id %>" <%=Overdue[i].completed ? "checked" : "" %>
-                onclick="updateTodo(<%= Overdue[i].id %>)"
-                
-                class="w-4 h-4 text-gray-600 align-center">
-                <label for="checkbox-Overdue-<%= Overdue[i].id %>" class="ml-2 text-sm cursor-pointer text-gray-600 ">
-                    <%= Overdue[i].title; %>
-                </label>
-                <a href="/"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                    stroke="currentColor" class="w-5 h-5 ml-2 text-gray-600 todo-task hidden">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                    d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-            </a>
-            
-        </div>
-    </li>
-    <% } %> 
+                <% let id=Overdue[i].id; %>
+                    <input type="checkbox" id="checkbox-Overdue-<%= Overdue[i].id %>" <%=Overdue[i].completed
+                        ? "checked" : "" %>
+                    onclick="updateTodo(<%= Overdue[i].id %>)"
+
+                        class="w-4 h-4 text-gray-600 align-center">
+                        <label for="checkbox-Overdue-<%= Overdue[i].id %>"
+                            class="ml-2 text-sm cursor-pointer text-gray-600 ">
+                            <%= Overdue[i].title; %>
+                        </label>
+                        <a href="/"><svg xmlns="http://www.w3.org/2000/svg" onclick="TodoDelete( <%= Overdue[i].id %> )" fill="none" viewBox="0 0 24 24"
+                                stroke-width="1.5" stroke="currentColor"
+                                class="w-5 h-5 ml-2 text-gray-600 todo-task hidden">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </a>
+
+            </div>
+        </li>
+        <% } %>
 </ul>
 <div class="flex items-center">
     <h5>Due Today</h5>
-    <p  id = 'count-due-today' class="bg-gray-200 inline p-1 mx-2 my-1 rounded">
+    <p id='count-due-today' class="bg-gray-200 inline p-1 mx-2 my-1 rounded">
         <%= dueToday.length %>
     </p>
 </div>
 <ul class="list-none">
-    <% for (var i = 0; i< dueToday.length ; i++) { %>
-        <%  let id = dueToday[i].id; %>
-        <li class="todos-item">
-            <div class="flex items-center w-fit px-2 py-1 my-2 rounded hover:bg-purple-100">
-                
-            <input type="checkbox" <%=dueToday[i].completed ? "checked" : "" %>
-            onclick="updateTodo(<%= dueToday[i].id %>)"
-            id="checkbox-today-due-<%= dueToday[i].id %>"
-            class="w-4 h-4 text-gray-600 bg-grey-100 rounded-border">
-            <label for="checkbox-today-due-<%= dueToday[i].id %>" class="ml-2 text-sm cursor-pointer text-gray-600 ">
-               <%= dueToday[i].title %>
-            </label>
-            <a href="/"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                    stroke="currentColor" class="w-5 h-5 ml-2 text-gray-600 todo-task hidden">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-            </a>
-        </div>
-    </li>
-    <% } %>
+    <% for (var i=0; i< dueToday.length ; i++) { %>
+        <% let id=dueToday[i].id; %>
+            <li class="todos-item">
+                <div class="flex items-center w-fit px-2 py-1 my-2 rounded hover:bg-purple-100">
+
+                    <input type="checkbox" <%=dueToday[i].completed ? "checked" : "" %>
+                    onclick="updateTodo(<%= dueToday[i].id %>)"
+                        id="checkbox-today-due-<%= dueToday[i].id %>"
+                            class="w-4 h-4 text-gray-600 bg-grey-100 rounded-border">
+                            <label for="checkbox-today-due-<%= dueToday[i].id %>"
+                                class="ml-2 text-sm cursor-pointer text-gray-600 ">
+                                <%= dueToday[i].title %>
+                            </label>
+                            <a href="/"><svg xmlns="http://www.w3.org/2000/svg" fill="none" onclick="TodoDelete(<%= dueToday[i].id %>)" viewBox="0 0 24 24"
+                                    stroke-width="1.5" stroke="currentColor"
+                                    class="w-5 h-5 ml-2 text-gray-600 todo-task hidden">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                            </a>
+                </div>
+            </li>
+            <% } %>
 </ul>
 <div class="flex items-center">
     <h5>Due Later</h5>
@@ -80,26 +84,29 @@
     </p>
 </div>
 <ul class="list-none">
-    <% for (var i = 0; i< dueLater.length ; i++) { %>
-        <%  let id = dueLater[i].id; %>
-        <li class="todos-item">
-            <div class="flex items-center w-fit px-2 py-1 my-2 rounded hover:bg-purple-100">
-                
-            <input type="checkbox" id="checkbox-dueLater-<%= dueLater[i].id %>" <%=dueLater[i].completed ? "checked" : "" %>
-            onclick="updateTodo(<%= dueLater[i].id %>)"
-             class="w-4 h-4 text-gray-600 bg-grey-100 rounded-border">
-            <label for="checkbox-dueLater-<%= dueLater[i].id %>" class="ml-2 text-sm cursor-pointer text-gray-600 ">
-               <%= dueLater[i].title %>
-            </label>
-            <a href="/"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                    stroke="currentColor" class="w-5 h-5 ml-2 text-gray-600 todo-task hidden">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-            </a>
-        </div>
-    </li>
-    <% } %>
+    <% for (var i=0; i< dueLater.length ; i++) { %>
+        <% let id=dueLater[i].id; %>
+            <li class="todos-item">
+                <div class="flex items-center w-fit px-2 py-1 my-2 rounded hover:bg-purple-100">
+
+                    <input type="checkbox" id="checkbox-dueLater-<%= dueLater[i].id %>" <%=dueLater[i].completed
+                        ? "checked" : "" %>
+                    onclick="updateTodo(<%= dueLater[i].id %>)"
+                        class="w-4 h-4 text-gray-600 bg-grey-100 rounded-border">
+                        <label for="checkbox-dueLater-<%= dueLater[i].id %>"
+                            class="ml-2 text-sm cursor-pointer text-gray-600 ">
+                            <%= dueLater[i].title %>
+                        </label>
+                        <a href="/"><svg xmlns="http://www.w3.org/2000/svg" onclick="TodoDelete(<%= dueLater[i].id %>)" fill="none" viewBox="0 0 24 24"
+                                stroke-width="1.5" stroke="currentColor"
+                                class="w-5 h-5 ml-2 text-gray-600 todo-task hidden">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </a>
+                </div>
+            </li>
+            <% } %>
 </ul>
 </div>
 
