@@ -26,7 +26,10 @@
         <li class="todos-item">
             <div class="flex w-fit items-center px-2 py-1  my-2 rounded hover:bg-purple-100">
                 <%  let id = Overdue[i].id; %>
-                <input type="checkbox" id= "checkbox-Overdue-<%= Overdue[i].id %>" class="w-4 h-4 text-gray-600 align-center">
+                <input type="checkbox"  id= "checkbox-Overdue-<%= Overdue[i].id %>" <%=Overdue[i].completed ? "checked" : "" %>
+                onclick="updateTodo(<%= Overdue[i].id %>)"
+                
+                class="w-4 h-4 text-gray-600 align-center">
                 <label for="checkbox-Overdue-<%= Overdue[i].id %>" class="ml-2 text-sm cursor-pointer text-gray-600 ">
                     <%= Overdue[i].title; %>
                 </label>
@@ -53,7 +56,10 @@
         <li class="todos-item">
             <div class="flex items-center w-fit px-2 py-1 my-2 rounded hover:bg-purple-100">
                 
-            <input type="checkbox" id="checkbox-today-due-<%= dueToday[i].id %>" class="w-4 h-4 text-gray-600 bg-grey-100 rounded-border">
+            <input type="checkbox" <%=dueToday[i].completed ? "checked" : "" %>
+            onclick="updateTodo(<%= dueToday[i].id %>)"
+            id="checkbox-today-due-<%= dueToday[i].id %>"
+            class="w-4 h-4 text-gray-600 bg-grey-100 rounded-border">
             <label for="checkbox-today-due-<%= dueToday[i].id %>" class="ml-2 text-sm cursor-pointer text-gray-600 ">
                <%= dueToday[i].title %>
             </label>
@@ -79,7 +85,9 @@
         <li class="todos-item">
             <div class="flex items-center w-fit px-2 py-1 my-2 rounded hover:bg-purple-100">
                 
-            <input type="checkbox" id="checkbox-dueLater-<%= dueLater[i].id %>" class="w-4 h-4 text-gray-600 bg-grey-100 rounded-border">
+            <input type="checkbox" id="checkbox-dueLater-<%= dueLater[i].id %>" <%=dueLater[i].completed ? "checked" : "" %>
+            onclick="updateTodo(<%= dueLater[i].id %>)"
+             class="w-4 h-4 text-gray-600 bg-grey-100 rounded-border">
             <label for="checkbox-dueLater-<%= dueLater[i].id %>" class="ml-2 text-sm cursor-pointer text-gray-600 ">
                <%= dueLater[i].title %>
             </label>
