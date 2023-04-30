@@ -15,8 +15,8 @@
         </div>
     </div>
 </form>
-<h5>Overdue</h5>
 <div class="flex items-center">
+    <h5>Overdue</h5>
     <p id = 'count-overdue' class="bg-gray-200 inline p-1 mx-2 my-1 rounded">
         <%= Overdue.length %>
     </p>
@@ -41,11 +41,11 @@
     </li>
     <% } %> 
 </ul>
-<h5>Due Today</h5>
 <div class="flex items-center">
-    <h5  id = 'count-due-today' class="bg-gray-200 rounded">
+    <h5>Due Today</h5>
+    <p  id = 'count-due-today' class="bg-gray-200 rounded">
         <%= dueToday.length %>
-    </h5>
+    </p>
 </div>
 <ul class="list-none">
     <% for (var i = 0; i< dueToday.length ; i++) { %>
@@ -67,11 +67,11 @@
     </li>
     <% } %>
 </ul>
-<h5>Due Later</h5>
 <div class="flex items-center">
-    <h5 id="count-due-later" class="bg-gray-200 rounded">
+    <h5>Due Later</h5>
+    <p id="count-due-later" class="bg-gray-200 rounded">
         <%= dueLater.length %>
-    </h5>
+    </p>
 </div>
 <ul class="list-none">
     <% for (var i = 0; i< dueLater.length ; i++) { %>
