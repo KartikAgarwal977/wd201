@@ -26,8 +26,8 @@
         <li class="todos-item">
             <div class="flex w-fit items-center px-2 py-1  my-2 rounded hover:bg-purple-100">
                 <%  let id = Overdue[i].id; %>
-                <input type="checkbox" id= id class="w-4 h-4 text-gray-600 align-center">
-                <label for=id class="ml-2 text-sm cursor-pointer text-gray-600 ">
+                <input type="checkbox" id= "checkbox-Overdue-<%= Overdue[i].id %>" class="w-4 h-4 text-gray-600 align-center">
+                <label for="checkbox-Overdue-<%= Overdue[i].id %>" class="ml-2 text-sm cursor-pointer text-gray-600 ">
                     <%= Overdue[i].title; %>
                 </label>
                 <a href="/"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
@@ -54,7 +54,7 @@
             <div class="flex items-center w-fit px-2 py-1 my-2 rounded hover:bg-purple-100">
                 
             <input type="checkbox" id="checkbox-today-due-<%= dueToday[i].id %>" class="w-4 h-4 text-gray-600 bg-grey-100 rounded-border">
-            <label for=id class="ml-2 text-sm cursor-pointer text-gray-600 ">
+            <label for="checkbox-today-due-<%= dueToday[i].id %>" class="ml-2 text-sm cursor-pointer text-gray-600 ">
                <%= dueToday[i].title %>
             </label>
             <a href="/"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
@@ -79,8 +79,8 @@
         <li class="todos-item">
             <div class="flex items-center w-fit px-2 py-1 my-2 rounded hover:bg-purple-100">
                 
-            <input type="checkbox" id=id class="w-4 h-4 text-gray-600 bg-grey-100 rounded-border">
-            <label for=id class="ml-2 text-sm cursor-pointer text-gray-600 ">
+            <input type="checkbox" id="checkbox-dueLater-<%= dueLater[i].id %>" class="w-4 h-4 text-gray-600 bg-grey-100 rounded-border">
+            <label for="checkbox-dueLater-<%= dueLater[i].id %>" class="ml-2 text-sm cursor-pointer text-gray-600 ">
                <%= dueLater[i].title %>
             </label>
             <a href="/"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
