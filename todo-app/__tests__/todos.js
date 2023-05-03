@@ -59,7 +59,7 @@ describe("Todo Application", function () {
     
     res = await agent.get('/')
     csrfToken = extractCsrfToken(res)
-    const markAsCompleted = await agent.put(`/todos/${latestTodo.id}/markAsCompleted`).send({
+    const markAsCompleted = await agent.put(`/todos/${latestTodo.id}`).send({
       _csrf: csrfToken,
     })
     const parseUpdateResponse = JSON.parse(markAsCompleted.text)
