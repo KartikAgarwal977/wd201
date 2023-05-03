@@ -7,7 +7,7 @@
                 class="border border-gray-300 rounded p-2 text-gray-900 w-full text-sm" required />
         </div>
         <div class="flex-auto">
-            <input type="date" name="dueDate" class="border border-grey-300 rounded p-2 w-full" />
+            <input type="date" name="dueDate" class="border border-grey-300 rounded p-2 w-full" required/>
         </div>
         <div class="flex-none">
             <button type="submit"
@@ -109,6 +109,37 @@
             </li>
             <% } %>
 </ul>
+<div class="flex items-center">
+    <h5>Completed Items</h5>
+    <p id="count-completed" class="bg-gray-200 inline p-1 mx-2 my-1 rounded">
+        <%= todocompleted.length %>
+    </p>
+</div>
+<ul class="list-none">
+    <% for (var i=0; i< todocompleted.length ; i++) { %>
+            <li class="todos-item">
+                <div class="flex items-center w-fit px-2 py-1 my-2 rounded hover:bg-purple-100">
+
+                    <input type="checkbox" id="checkbox-dueLater-<%= todocompleted[i].id %>" <%=todocompleted[i].completed
+                        ? "checked" : "" %>
+                    onclick="updateTodo(<%= todocompleted[i].id %>)"
+                        class="w-4 h-4 text-gray-600 bg-grey-100 rounded-border">
+                        <label for="checkbox-dueLater-<%= todocompleted[i].id %>"
+                            class="ml-2 text-sm cursor-pointer text-gray-600 ">
+                            <%= todocompleted[i].title %>
+                        </label>
+                        <a href="/"><svg xmlns="http://www.w3.org/2000/svg" onclick="TodoDelete(<%= todocompleted[i].id %>)" fill="none" viewBox="0 0 24 24"
+                                stroke-width="1.5" stroke="currentColor"
+                                class="w-5 h-5 ml-2 text-gray-600 todo-task hidden">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </a>
+                </div>
+            </li>
+            <% } %>
+</ul>
+
 </div>
 
 <!-- <table>
