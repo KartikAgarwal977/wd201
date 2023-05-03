@@ -3,10 +3,18 @@ const app = express();
 const bodyParser = require("body-parser");
 const { todos } = require("./models");
 const path = require('path')
-
+var csrf = require("tiny-csrf");
+var cookieParser = require('cookie-parser')
 app.set("view engine", 'ejs')
 app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser('secret'))
+app.use(
+  csrf(
+    "this_should_be_32_character_long", // secret -- must be 32 bits or chars in length
+    ["POST", "PUT", "DELETE"] // the request methods we want CSRF protection for
+    )
+);
 
 app.use(express.static(path.join(__dirname,'public')))
 
@@ -23,10 +31,14 @@ app.get("/", async (request, response) => {
       dueLater,
       dueToday,
       Overdue,
+      csrfToken: request.csrfToken(), 
     });
   } else {
     response.json({
-      allTodos
+      allTodos,
+      dueLater,
+      dueToday,
+      Overdue,
     });
   }
 });
