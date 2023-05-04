@@ -2,21 +2,21 @@ const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
 const { todos } = require("./models");
-const path = require('path')
+const path = require("path");
 var csrf = require("tiny-csrf");
-var cookieParser = require('cookie-parser')
-app.set("view engine", 'ejs')
+var cookieParser = require("cookie-parser");
+app.set("view engine", "ejs");
 app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser('secret'))
+app.use(cookieParser("secret"));
 app.use(
   csrf(
     "this_should_be_32_character_long", // secret -- must be 32 bits or chars in length
     ["POST", "PUT", "DELETE"] // the request methods we want CSRF protection for
-    )
+  )
 );
 
-app.use(express.static(path.join(__dirname,'public')))
+app.use(express.static(path.join(__dirname, "public")));
 
 app.get("/", async (request, response) => {
   const allTodos = await todos.getTodo();
@@ -32,7 +32,7 @@ app.get("/", async (request, response) => {
       dueToday,
       Overdue,
       completed,
-      csrfToken: request.csrfToken(), 
+      csrfToken: request.csrfToken(),
     });
   } else {
     response.json({
@@ -43,7 +43,6 @@ app.get("/", async (request, response) => {
     });
   }
 });
-
 
 app.get("/todos", async (request, response) => {
   try {
@@ -67,10 +66,7 @@ app.get("/todos/:id", async function (request, response) {
 app.post("/todos", async (request, response) => {
   console.log("create a table", request.body);
   try {
-    await todos.addTodo(
-     request.body.title,
-    request.body.dueDate
-    );
+    await todos.addTodo(request.body.title, request.body.dueDate);
     return response.redirect("/");
   } catch (error) {
     console.error(error);
@@ -92,10 +88,9 @@ app.delete("/todos/:id", async (req, res) => {
   console.log("We have to delete a Todo with ID: ", req.params.id);
   try {
     await todos.remove(req.params.id);
-    res.json({success:true});
-  }
-  catch (error) { 
-    return res.status(422).json(error)
+    res.json({ success: true });
+  } catch (error) {
+    return res.status(422).json(error);
   }
 });
 module.exports = app;
