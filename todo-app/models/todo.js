@@ -15,11 +15,9 @@ module.exports = (sequelize, DataTypes) => {
     static addTodo(title, dueDate) {
       return this.create({ title: title, dueDate: dueDate, completed: false });
     }
-    setCompletionStatus() {
-      if (this.completed)
-        return this.update({ completed: false})
-      else
-        return this.update({completed:true})
+    
+    setCompletionStatus(status) {
+      return this.update({completed:status})
     }
     static async getTodo() {
       return await this.findAll()

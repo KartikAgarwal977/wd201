@@ -23,7 +23,7 @@ app.get("/", async (request, response) => {
   const dueToday = await todos.dueToday();
   const Overdue = await todos.Overdue();
   const dueLater = await todos.dueLater();
-  const todocompleted = await todos.todocompleted();
+  const completed = await todos.todocompleted();
   if (request.accepts("html")) {
     response.render("index", {
       allTodos,
@@ -31,7 +31,7 @@ app.get("/", async (request, response) => {
       dueLater,
       dueToday,
       Overdue,
-      todocompleted,
+      completed,
       csrfToken: request.csrfToken(), 
     });
   } else {
@@ -77,12 +77,12 @@ app.post("/todos", async (request, response) => {
     return response.status(422).json(error);
   }
 });
-//change occurs on id which id we write on the link
+//change occurs on id which id we write on the link for mark complete or incomplete
 app.put("/todos/:id", async (req, res) => {
   console.log("we have to update a todo with ID:", req.params.id);
   const Todo = await todos.findByPk(req.params.id);
   try {
-    const updated = await Todo.setCompletionStatus();
+    const updated = await Todo.setCompletionStatus(req.body.completed);
     return res.json(updated);
   } catch (error) {
     console.error(error);
