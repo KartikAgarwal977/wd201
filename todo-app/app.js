@@ -1,9 +1,15 @@
 const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
-const { todos } = require("./models");
+const { todos, User } = require("./models");
 const path = require("path");
 var csrf = require("tiny-csrf");
+const passport = require('passport');
+const connectEnsureLogin = require('connect-ensure-login');
+const session = require('express-session');
+const LocalStrategy = require('passport-local');
+const bcrypt = require('bcrypt');
+const saltRounds = 10 ;
 var cookieParser = require("cookie-parser");
 app.set("view engine", "ejs");
 app.use(bodyParser.json());
@@ -15,17 +21,69 @@ app.use(
     ["POST", "PUT", "DELETE"] // the request methods we want CSRF protection for
   )
 );
+app.use(session({
+  secret: "secret-key-874009116946977",
+  cookie: {
+    maxAge: 1000 * 60 * 60 * 24 // 24 hours
+  }
+})
+)
+app.use(passport.initialize())
+app.use(passport.session())
+
+passport.use(new LocalStrategy({
+  usernameField: "email",
+  passwordField: "password"
+}, (email, password, done) => {
+  User.findOne({ where: { email: email } })
+    .then(async(user) => {
+      const result = await bcrypt.compare(password, user.password)
+      if (result) {
+        return done(null, user)
+      }
+      else {
+        return done("Invalid Password");
+        }
+    }).catch((error) => {
+      return done(error)
+    }) 
+}))
+passport.serializeUser((user, done) => {
+  console.log("Serializing user in session", user.id);
+  done(null, user.id);
+})
+passport.deserializeUser((id, done) => {
+  User.findByPk(id)
+    .then((user) => {
+      return done(null, user)
+    })
+    .catch((error) => {
+      done(error, null)
+    })
+  })
 
 app.use(express.static(path.join(__dirname, "public")));
 
 app.get("/", async (request, response) => {
+  if (request.accepts("html")) {
+    response.render("index", {
+      title: "Todo application",
+      csrfToken: request.csrfToken(),
+    });
+  } else {
+    response.json({
+      csrfToken: request.csrfToken(),
+    });
+  }
+});
+app.get('/todos', connectEnsureLogin.ensureLoggedIn(), async (request, response) => {
   const allTodos = await todos.getTodo();
   const dueToday = await todos.dueToday();
   const Overdue = await todos.Overdue();
   const dueLater = await todos.dueLater();
   const completed = await todos.todocompleted();
   if (request.accepts("html")) {
-    response.render("index", {
+    response.render("todo", {
       allTodos,
       title: "Todo application",
       dueLater,
@@ -40,9 +98,54 @@ app.get("/", async (request, response) => {
       dueLater,
       dueToday,
       Overdue,
+      csrfToken: request.csrfToken(),
     });
   }
 });
+
+
+app.get("/signup", async (req, res) => {
+  res.render('signup', {
+    title: "Sign Up",
+    csrfToken: req.csrfToken(),
+})
+
+})
+
+app.get("/login", async (req, res) => {
+  res.render('login', {
+    title: "Login",
+    csrfToken: req.csrfToken(),
+  })
+})
+app.post("/session", passport.authenticate('local', { failureRedirect: "/login", failureFlash: true,}), async (request, response) => {
+  console.log(request.user);
+  response.redirect("/todos");
+})
+
+
+app.post('/users', async (req, res) => {
+  const hashedPwd = await bcrypt.hash(req.body.password, saltRounds)
+  console.log(hashedPwd)
+  console.log(`firstName ${req.body.FirstName}`)
+  try {
+    const user = await User.create({
+      firstName: req.body.FirstName,
+      lastName: req.body.LastName,
+      email: req.body.Email,
+      password: hashedPwd    
+    })
+    req.login(user, (err) => {
+      if (err) {
+        console.log(err)
+      }
+      res.redirect('/todos')
+    })
+  }
+  catch(error) {
+    console.error(error)
+  }
+})
 
 app.get("/todos", async (request, response) => {
   try {

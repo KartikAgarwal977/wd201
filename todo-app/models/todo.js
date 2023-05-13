@@ -11,6 +11,9 @@ module.exports = (sequelize, DataTypes) => {
     // eslint-disable-next-line no-unused-vars
     static associate(models) {
       // define association here
+      todos.belongsTo(models.User, {
+        foreignKey: "userId"
+      })
     }
     static addTodo(title, dueDate) {
       return this.create({ title: title, dueDate: dueDate, completed: false });
