@@ -10,11 +10,13 @@ const session = require('express-session');
 const LocalStrategy = require('passport-local');
 const bcrypt = require('bcrypt');
 const saltRounds = 10 ;
+const flash = require('connect-flash');
 var cookieParser = require("cookie-parser");
 app.set("view engine", "ejs");
 app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser("secret"));
+app.use(flash({}))
 app.use(
   csrf(
     "this_should_be_32_character_long", // secret -- must be 32 bits or chars in length
