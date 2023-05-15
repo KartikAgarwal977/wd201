@@ -159,15 +159,6 @@ app.post('/users', async (req, res) => {
   }
 })
 
-app.get("/todos", connectEnsureLogin.ensureLoggedIn(),async (request, response) => {
-  try {
-    const Todo = await todos.findAll({ order: [["id", "ASC"]] });
-    return response.json(Todo);
-  } catch (error) {
-    console.error(error);
-    return response.status(422).json(error);
-  }
-});
 app.get("/todos/:id",connectEnsureLogin.ensureLoggedIn(), async function (request, response) {
   try {
     const todo = await todos.findByPk(request.params.id);
