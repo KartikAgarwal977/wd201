@@ -53,7 +53,7 @@ passport.use(new LocalStrategy({
         return done(null, false, { message :"Invalid Password"});
         }
     }).catch((error) => {
-      return done(error)
+      return done(null,false, {message: "User doesn't exist"})
     }) 
 }))
 passport.serializeUser((user, done) => {
