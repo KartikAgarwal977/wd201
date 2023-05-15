@@ -39,7 +39,7 @@ describe("Todo Application", function () {
       _csrf: csrfToken,
       firstName: "Test",
       lastName: "User 1",
-      email: "user1@test.com",
+      Email: "user1@test.com",
       password: "password",
     });
     expect(res.statusCode).toBe(302);

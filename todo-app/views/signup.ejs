@@ -20,24 +20,31 @@
             <div class="col-start-3 col-span-2">
                 <%- include("header.ejs") %>
                 <h6 class = "py-4">Signup as a new user</h6>
+                <ul>
+                    <% if(messages && messages.error && messages.error.length > 0)  { %>
+                        <% for(var i=0; i<messages.error.length; i++) { %>
+                                <li class="bg-red-500 border-red-800 px-4 py-2"> <%= messages.error[i] %></li>
+                        <% } %>
+                      <% } %>
+                </ul>
                 <form action="/users" method="post">
                     <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                     <div class="block mx-3 px-4 gap-2">
                         <div class="block-auto my-3">
                             <label class="text-sm">First Name</label>
-                            <input class="rounded border-2 text-sm p-2 w-full" type="text" name="FirstName" required placeholder="First Name">
+                            <input class="rounded border-2 text-sm p-2 w-full" type="text" name="FirstName" placeholder="First Name">
                         </div>
                         <div class="block-auto my-3">
                             <label class="text-sm">Last Name</label>
-                            <input class="rounded border-2 text-sm p-2 w-full" type="text" name="LastName" required placeholder="Last Name">
+                            <input class="rounded border-2 text-sm p-2 w-full" type="text" name="LastName" placeholder="Last Name">
                         </div>
                         <div class="block-auto my-3">
                             <label class="text-sm">Email</label>
-                            <input class="rounded border-2 text-sm p-2 w-full" type="email" name="Email" required placeholder="Email">
+                            <input class="rounded border-2 text-sm p-2 w-full" type="email" name="Email" placeholder="Email">
                         </div>
                         <div class="block-auto my-3">
                             <label class="text-sm">Password</label>
-                            <input class="rounded border-2 text-sm p-2 w-full" type="password" name="password" required placeholder="password">
+                            <input class="rounded border-2 text-sm p-2 w-full" type="password" name="password" placeholder="password">
                         </div>
                         
                         <div class="block-auto w-15 h-10 px-4 my-3">

@@ -28,12 +28,17 @@ app.use(session({
   secret: "secret-key-874009116946977",
   cookie: {
     maxAge: 1000 * 60 * 60 * 24 // 24 hours
-  }
+  },
+  resave: true,
+  saveUninitialized: true,
 })
 )
 app.use(passport.initialize())
 app.use(passport.session())
-
+app.use(function(request, response, next) {
+  response.locals.messages = request.flash();
+  next();
+});
 passport.use(new LocalStrategy({
   usernameField: "Email",
   passwordField: "password"
@@ -95,7 +100,8 @@ app.get('/todos', connectEnsureLogin.ensureLoggedIn(), async (request, response)
       Overdue,
       completed,
       csrfToken: request.csrfToken(),
-    });
+    }
+    );
   } else {
     response.json({
       // allTodos,
@@ -104,6 +110,7 @@ app.get('/todos', connectEnsureLogin.ensureLoggedIn(), async (request, response)
       Overdue,
       csrfToken: request.csrfToken(),
     });
+    
   }
 });
 
@@ -125,7 +132,7 @@ app.get("/login", async (req, res) => {
 app.post("/session", passport.authenticate('local',
   {
     failureRedirect: "/login",
-    // failureFlash: true,
+    failureFlash: true,
   }), async (request, response) => {
   // console.log(request.user);
   response.redirect("/todos");
@@ -144,6 +151,18 @@ app.post('/users', async (req, res) => {
   const hashedPwd = await bcrypt.hash(req.body.password, saltRounds)
   console.log(hashedPwd)
   console.log(`firstName ${req.body.FirstName}`)
+  if (req.body.FirstName == "") {
+    req.flash('error', 'First name is required')
+    return res.redirect('/signup')
+  }
+  if (req.body.Email == "") {
+    req.flash('error', 'email is required')
+    return res.redirect('/signup')
+  }
+  if (req.body.password.length <8) {
+    req.flash('error', 'password atleast of 8 character')
+    return res.redirect('/signup')
+  }
   try {
     const user = await User.create({
       firstName: req.body.FirstName,
@@ -155,6 +174,7 @@ app.post('/users', async (req, res) => {
       if (err) {
         console.log(err)
       }
+      
       res.redirect('/todos')
     })
   }
@@ -175,6 +195,16 @@ app.get("/todos/:id",connectEnsureLogin.ensureLoggedIn(), async function (reques
 });
 
 app.post("/todos",connectEnsureLogin.ensureLoggedIn(), async (request, response) => {
+  
+  if (request.body.title == "") {
+    request.flash("error", "Todo must have a title")
+    return response.redirect("/todos")
+  }
+  if (request.body.dueDate == "") {
+    request.flash("error", "Todo must have a due date")
+    return response.redirect("/todos")
+  }
+  
   console.log("create a table", request.body);
   try {
     await todos.addTodo({ title:request.body.title,dueDate:request.body.dueDate, userId: request.user.id });
