@@ -7,11 +7,11 @@ function extractCsrfToken(res) {
   var $ = cheerio.load(res.text);
   return $("[name=_csrf]").val();
 }
-const login = async (agent, username, password) => {
+const login = async (agent, Email, password) => {
   let res = await agent.get("/login");
   let csrfToken = extractCsrfToken(res);
   res = await agent.post("/session").send({
-    email: username,
+    Email: Email,
     password: password,
     _csrf: csrfToken,
   });

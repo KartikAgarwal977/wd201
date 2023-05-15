@@ -45,7 +45,7 @@ passport.use(new LocalStrategy({
         return done(null, user)
       }
       else {
-        return done("Invalid Password");
+        return done(null, false, { message :"Invalid Password"});
         }
     }).catch((error) => {
       return done(error)
@@ -122,8 +122,12 @@ app.get("/login", async (req, res) => {
     csrfToken: req.csrfToken(),
   })
 })
-app.post("/session", passport.authenticate('local', { failureRedirect: "/login", failureFlash: true,}), async (request, response) => {
-  console.log(request.user);
+app.post("/session", passport.authenticate('local',
+  {
+    failureRedirect: "/login",
+    // failureFlash: true,
+  }), async (request, response) => {
+  // console.log(request.user);
   response.redirect("/todos");
 })
 
@@ -154,8 +158,9 @@ app.post('/users', async (req, res) => {
       res.redirect('/todos')
     })
   }
-  catch(error) {
-    console.error(error)
+  catch (error) {
+    req.flash("error", "Email already exist")
+    return res.redirect("/signup")
   }
 })
 
