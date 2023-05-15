@@ -9,8 +9,40 @@
     <title> <%= title %></title>
     <link rel="stylesheet" href="./css/styles.css">
     <script src="https://cdn.tailwindcss.com"></script>
-
 </head>
+<script>
+    var token = document
+        .querySelector("meta[name = 'csrf-token']")
+        .getAttribute('content')
+    function updateTodo(id) {
+        var complete_boolean = document.getElementById(`todo-checkbox-${id}`).checked
+        fetch(`/todos/${id}`, {
+            method: 'put',
+            headers: { "Content-type": "application/json" },
+            body: JSON.stringify({
+                '_csrf': token,
+                'completed': complete_boolean
+            })
+        }).then((res) => {
+            if (res.ok) {
+                window.location.reload()
+            }
+        }).catch((err) => console.error(err))
+    }
+    function TodoDelete(id) {
+        fetch(`/todos/${id}`, {
+            method: 'delete',
+            headers: { "Content-type": "application/json" },
+            body: JSON.stringify({
+                '_csrf': token
+            })
+        }).then((res) => {
+            if (res.ok) {
+                window.location.reload()
+            }
+        }).catch((err) => console.error(err))
+    }
+</script>
 
 <body>
     <div class="grid grid-cols-6">
@@ -41,7 +73,8 @@
                             <%- include('todos.ejs', {title: "Completed Items" , data: completed}) %>
                                 <%- include('footer.ejs') %>
             </div>
-
+            <a href="/signout">signout</a>
+    </div>
 
 </body>
 

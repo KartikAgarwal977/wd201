@@ -15,8 +15,8 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "userId"
       })
     }
-    static addTodo(title, dueDate) {
-      return this.create({ title: title, dueDate: dueDate, completed: false });
+    static addTodo({ title, dueDate, userId }) {
+      return this.create({ title: title, dueDate: dueDate, completed: false, userId });
     }
 
     setCompletionStatus(status) {
@@ -25,42 +25,53 @@ module.exports = (sequelize, DataTypes) => {
     static async getTodo() {
       return await this.findAll();
     }
-    static async dueToday() {
+    static async dueToday(userId) {
       return await this.findAll({
         where: {
           dueDate: { [Op.eq]: new Date() },
           completed: false,
+          userId,
         },
         order: [["id", "ASC"]],
       });
     }
-    static async Overdue() {
+    static async Overdue(userId) {
       return await this.findAll({
         where: {
-          dueDate: { [Op.lt]: new Date() },
+          dueDate: {
+            [Op.lt]: new Date()
+          },
+          userId,
           completed: false,
         },
         order: [["id", "ASC"]],
       });
     }
-    static async dueLater() {
+    static async dueLater(userId) {
       return await this.findAll({
         where: {
           dueDate: { [Op.gt]: new Date() },
+          userId,
           completed: false,
         },
         order: [["id", "ASC"]],
       });
     }
-    static async todocompleted() {
+    static async todocompleted(userId) {
       return await this.findAll({
         where: {
           completed: true,
+          userId
         },
       });
     }
-    static async remove(id) {
-      return await this.destroy({ where: { id } });
+    static async remove(id,userId) {
+      return await this.destroy({
+        where: {
+          id,
+          userId
+        }
+      });
     }
   }
   todos.init(

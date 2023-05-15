@@ -10,13 +10,14 @@ const session = require('express-session');
 const LocalStrategy = require('passport-local');
 const bcrypt = require('bcrypt');
 const saltRounds = 10 ;
-const flash = require('connect-flash');
+const flash = require("connect-flash");
 var cookieParser = require("cookie-parser");
 app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "views"));
 app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser("secret"));
-app.use(flash({}))
+app.use(flash())
 app.use(
   csrf(
     "this_should_be_32_character_long", // secret -- must be 32 bits or chars in length
@@ -34,7 +35,7 @@ app.use(passport.initialize())
 app.use(passport.session())
 
 passport.use(new LocalStrategy({
-  usernameField: "email",
+  usernameField: "Email",
   passwordField: "password"
 }, (email, password, done) => {
   User.findOne({ where: { email: email } })
@@ -79,14 +80,15 @@ app.get("/", async (request, response) => {
   }
 });
 app.get('/todos', connectEnsureLogin.ensureLoggedIn(), async (request, response) => {
-  const allTodos = await todos.getTodo();
-  const dueToday = await todos.dueToday();
-  const Overdue = await todos.Overdue();
-  const dueLater = await todos.dueLater();
-  const completed = await todos.todocompleted();
+  const loggedInuser = request.user.id 
+  // const allTodos = await todos.getTodo(loggedInuser);                                                 
+  const dueToday = await todos.dueToday(loggedInuser);
+  const Overdue = await todos.Overdue(loggedInuser);
+  const dueLater = await todos.dueLater(loggedInuser);
+  const completed = await todos.todocompleted(loggedInuser);
   if (request.accepts("html")) {
     response.render("todo", {
-      allTodos,
+      // allTodos,
       title: "Todo application",
       dueLater,
       dueToday,
@@ -96,7 +98,7 @@ app.get('/todos', connectEnsureLogin.ensureLoggedIn(), async (request, response)
     });
   } else {
     response.json({
-      allTodos,
+      // allTodos,
       dueLater,
       dueToday,
       Overdue,
@@ -125,6 +127,14 @@ app.post("/session", passport.authenticate('local', { failureRedirect: "/login",
   response.redirect("/todos");
 })
 
+app.get("/signout", (request, response, next) => {
+  request.logout((err) => {
+    if (err) {
+      return next(err);
+    }
+    response.redirect("/");
+    });
+  });
 
 app.post('/users', async (req, res) => {
   const hashedPwd = await bcrypt.hash(req.body.password, saltRounds)
@@ -149,7 +159,7 @@ app.post('/users', async (req, res) => {
   }
 })
 
-app.get("/todos", async (request, response) => {
+app.get("/todos", connectEnsureLogin.ensureLoggedIn(),async (request, response) => {
   try {
     const Todo = await todos.findAll({ order: [["id", "ASC"]] });
     return response.json(Todo);
@@ -158,7 +168,7 @@ app.get("/todos", async (request, response) => {
     return response.status(422).json(error);
   }
 });
-app.get("/todos/:id", async function (request, response) {
+app.get("/todos/:id",connectEnsureLogin.ensureLoggedIn(), async function (request, response) {
   try {
     const todo = await todos.findByPk(request.params.id);
     return response.json(todo);
@@ -168,18 +178,18 @@ app.get("/todos/:id", async function (request, response) {
   }
 });
 
-app.post("/todos", async (request, response) => {
+app.post("/todos",connectEnsureLogin.ensureLoggedIn(), async (request, response) => {
   console.log("create a table", request.body);
   try {
-    await todos.addTodo(request.body.title, request.body.dueDate);
-    return response.redirect("/");
+    await todos.addTodo({ title:request.body.title,dueDate:request.body.dueDate, userId: request.user.id });
+    return response.redirect("/todos");
   } catch (error) {
     console.error(error);
     return response.status(422).json(error);
   }
 });
 //change occurs on id which id we write on the link for mark complete or incomplete
-app.put("/todos/:id", async (req, res) => {
+app.put("/todos/:id",connectEnsureLogin.ensureLoggedIn(), async (req, res) => {
   console.log("we have to update a todo with ID:", req.params.id);
   const Todo = await todos.findByPk(req.params.id);
   try {
@@ -189,10 +199,10 @@ app.put("/todos/:id", async (req, res) => {
     console.error(error);
   }
 });
-app.delete("/todos/:id", async (req, res) => {
+app.delete("/todos/:id", connectEnsureLogin.ensureLoggedIn(),async (req, res) => {
   console.log("We have to delete a Todo with ID: ", req.params.id);
   try {
-    await todos.remove(req.params.id);
+    await todos.remove(req.params.id, req.user.id);
     res.json({ success: true });
   } catch (error) {
     return res.status(422).json(error);
