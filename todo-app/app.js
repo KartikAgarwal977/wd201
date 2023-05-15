@@ -52,7 +52,7 @@ passport.use(new LocalStrategy({
       else {
         return done(null, false, { message :"Invalid Password"});
         }
-    }).catch((error) => {
+    }).catch(() => {
       return done(null,false, {message: "User doesn't exist"})
     }) 
 }))
