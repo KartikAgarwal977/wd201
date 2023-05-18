@@ -86,7 +86,9 @@ app.get("/", async (request, response) => {
 });
 app.get('/todos', connectEnsureLogin.ensureLoggedIn(), async (request, response) => {
   const loggedInuser = request.user.id 
-  // const allTodos = await todos.getTodo(loggedInuser);                                                 
+  // const allTodos = await todos.getTodo(loggedInuser); 
+  const account = await User.findByPk(loggedInuser);
+  const username = `${account.firstName} ${account.lastName}`;
   const dueToday = await todos.dueToday(loggedInuser);
   const Overdue = await todos.Overdue(loggedInuser);
   const dueLater = await todos.dueLater(loggedInuser);
@@ -99,6 +101,7 @@ app.get('/todos', connectEnsureLogin.ensureLoggedIn(), async (request, response)
       dueToday,
       Overdue,
       completed,
+      username,
       csrfToken: request.csrfToken(),
     }
     );
@@ -108,6 +111,8 @@ app.get('/todos', connectEnsureLogin.ensureLoggedIn(), async (request, response)
       dueLater,
       dueToday,
       Overdue,
+      username,
+      completed,
       csrfToken: request.csrfToken(),
     });
     
@@ -116,18 +121,27 @@ app.get('/todos', connectEnsureLogin.ensureLoggedIn(), async (request, response)
 
 
 app.get("/signup", async (req, res) => {
-  res.render('signup', {
+  if (req.user) {
+    res.redirect("/todos");
+  }  
+  else {
+    res.render('signup', {
     title: "Sign Up",
     csrfToken: req.csrfToken(),
-})
+})}
 
 })
 
 app.get("/login", async (req, res) => {
-  res.render('login', {
-    title: "Login",
-    csrfToken: req.csrfToken(),
-  })
+  if (req.user) {
+    res.redirect("/todos");
+  }
+  else {
+    res.render('login', {
+      title: "Login",
+      csrfToken: req.csrfToken(),
+    })
+  }
 })
 app.post("/session", passport.authenticate('local',
   {
@@ -218,20 +232,32 @@ app.post("/todos",connectEnsureLogin.ensureLoggedIn(), async (request, response)
 app.put("/todos/:id",connectEnsureLogin.ensureLoggedIn(), async (req, res) => {
   console.log("we have to update a todo with ID:", req.params.id);
   const Todo = await todos.findByPk(req.params.id);
+  if (Todo.userId === req.user.id) {
   try {
-    const updated = await Todo.setCompletionStatus(req.body.completed);
-    return res.json(updated);
+  const updatedTodo = await Todo.setCompletionStatus(
+  req.body.completed
+  );
+  return res.json(updatedTodo);
   } catch (error) {
-    console.error(error);
+  console.log(error);
+  return res.status(422).json(error);
   }
-});
-app.delete("/todos/:id", connectEnsureLogin.ensureLoggedIn(),async (req, res) => {
+  } else {
+  return res.status(403)
+  .json({ error: "You are not authorized to update this todo" });
+  }
+ });
+ app.delete("/todos/:id", connectEnsureLogin.ensureLoggedIn(),async (req, res) => {
   console.log("We have to delete a Todo with ID: ", req.params.id);
   try {
-    await todos.remove(req.params.id, req.user.id);
-    res.json({ success: true });
-  } catch (error) {
-    return res.status(422).json(error);
+  await todos.remove(req.params.id, req.user.id);
+  const check = await todos.findByPk(req.params.id)
+  if (check) {
+  return res.json({ success: false });
   }
-});
+  return res.json({ success: true });
+  } catch (error) {
+  return res.status(422).json(error);
+  }
+ });
 module.exports = app;

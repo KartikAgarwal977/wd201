@@ -48,6 +48,13 @@
     <div class="grid grid-cols-6">
         <div class="col-start-3 col-span-2">
                 <%- include('header.ejs') %>
+                <ul>
+                    <% if(messages && messages.error && messages.error.length > 0)  { %>
+                        <% for(var i=0; i<messages.error.length; i++) { %>
+                                <li class="bg-red-500 border-red-800 px-4 py-2"> <%= messages.error[i] %></li>
+                        <% } %>
+                      <% } %>
+                </ul>
                 <form action="/todos" method="post">
                     
                     <input type="hidden" name="_csrf" value="<%= csrfToken %>">
@@ -55,11 +62,11 @@
 
                         <div class="flex-auto">
                             <input type="text" placeholder="What's next?" name="title"
-                                class="border border-gray-300 rounded p-2 text-gray-900 w-full text-sm" required />
+                                class="border border-gray-300 rounded p-2 text-gray-900 w-full text-sm" />
                         </div>
                         <div class="flex-auto">
                             <input type="date" name="dueDate" class="border border-grey-300 rounded p-2 w-full"
-                                required />
+                                 />
                         </div>
                         <div class="flex-none">
                             <button type="submit"
@@ -73,7 +80,9 @@
                             <%- include('todos.ejs', {title: "Completed Items" , data: completed}) %>
                                 <%- include('footer.ejs') %>
             </div>
-            <div class="col-start-6 col-span-2 gap-2">
+            <div class="col-start-6 w-25 border-2 gap-2">
+                <div class="w-20 h-20 rounded-full bg-green-500 place-content-center"> <div class=" text-red-600 bold px-7 py-7 text-5xl"><%= username[0].toUpperCase() %></div></div>
+                <h1 class="p-2 px-4 "><%= username %></h1>
                     <a href="/signout" class="bg-green-500 p-2 py-2 px-4 rounded border-gray-900 m-5">signout</a>
             </div>
     </div>
