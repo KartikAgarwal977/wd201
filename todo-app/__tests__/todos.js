@@ -187,7 +187,7 @@ describe("Todo Application", function () {
       _csrf: csrfToken,
       firstName: "Test",
       lastName: "User 1",
-      Email: "user2@test.com",
+      Email: "user1@test.com",
       password: "12345678",
     });
     expect(res.statusCode).toBe(302);
@@ -202,6 +202,8 @@ describe("Todo Application", function () {
     const deleteResponse = await agent
       .delete(`/todos/${todoid}`)
       .send({ _csrf: csrfToken });
+    // extract the text from the response
+    // const parsedDeleteResponse = JSON.parse(deleteResponse.text);
     expect(deleteResponse.status).toBe(500);
   });
 });
