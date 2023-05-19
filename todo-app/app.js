@@ -73,15 +73,20 @@ passport.deserializeUser((id, done) => {
 app.use(express.static(path.join(__dirname, "public")));
 
 app.get("/", async (request, response) => {
-  if (request.accepts("html")) {
-    response.render("index", {
-      title: "Todo application",
-      csrfToken: request.csrfToken(),
-    });
-  } else {
-    response.json({
-      csrfToken: request.csrfToken(),
-    });
+  if (request.user) {
+    response.redirect("/todos");
+  }
+  else {
+    if (request.accepts("html")) {
+      response.render("index", {
+        title: "Todo application",
+        csrfToken: request.csrfToken(),
+      });
+    } else {
+      response.json({
+        csrfToken: request.csrfToken(),
+      });
+    }
   }
 });
 app.get('/todos', connectEnsureLogin.ensureLoggedIn(), async (request, response) => {
