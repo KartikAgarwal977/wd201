@@ -1,0 +1,7 @@
+body{
+    background: white;
+    font-family: sans-serif;
+}
+.todos-item :hover .todo-task{
+    display: block;
+}

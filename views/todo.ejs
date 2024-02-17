@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="csrf-token" content="<%= csrfToken %>">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> <%= title %></title>
+    <link rel="stylesheet" href="./css/styles.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<script>
+    var token = document
+        .querySelector("meta[name = 'csrf-token']")
+        .getAttribute('content')
+    function updateTodo(id) {
+        var complete_boolean = document.getElementById(`todo-checkbox-${id}`).checked
+        fetch(`/todos/${id}`, {
+            method: 'put',
+            headers: { "Content-type": "application/json" },
+            body: JSON.stringify({
+                '_csrf': token,
+                'completed': complete_boolean
+            })
+        }).then((res) => {
+            if (res.ok) {
+                window.location.reload()
+            }
+        }).catch((err) => console.error(err))
+    }
+    function TodoDelete(id) {
+        fetch(`/todos/${id}`, {
+            method: 'delete',
+            headers: { "Content-type": "application/json" },
+            body: JSON.stringify({
+                '_csrf': token
+            })
+        }).then((res) => {
+            if (res.ok) {
+                window.location.reload()
+            }
+        }).catch((err) => console.error(err))
+    }
+</script>
+
+<body>
+    <div class="grid grid-cols-6">
+        <div class="col-start-3 col-span-2">
+                <%- include('header.ejs') %>
+                <ul>
+                    <% if(messages && messages.error && messages.error.length > 0)  { %>
+                        <% for(var i=0; i<messages.error.length; i++) { %>
+                                <li class="bg-red-500 border-red-800 px-4 py-2"> <%= messages.error[i] %></li>
+                        <% } %>
+                      <% } %>
+                </ul>
+                <form action="/todos" method="post">
+                    
+                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                    <div class="flex my-3 gap-2">
+
+                        <div class="flex-auto">
+                            <input type="text" placeholder="What's next?" name="title"
+                                class="border border-gray-300 rounded p-2 text-gray-900 w-full text-sm" />
+                        </div>
+                        <div class="flex-auto">
+                            <input type="date" name="dueDate" class="border border-grey-300 rounded p-2 w-full"
+                                 />
+                        </div>
+                        <div class="flex-none">
+                            <button type="submit"
+                                class="border border-gray-900 rounded bg-green-500 text-white px-4 py-2 w-full">Add</button>
+                        </div>
+                    </div>
+                </form>
+                <%- include('todos.ejs', {title: "Overdue" , data: Overdue}) %>
+                    <%- include('todos.ejs', {title: "Due Today" , data: dueToday}) %>
+                        <%- include('todos.ejs', {title: "Due Later" , data: dueLater}) %>
+                            <%- include('todos.ejs', {title: "Completed Items" , data: completed}) %>
+                                <%- include('footer.ejs') %>
+            </div>
+            <div class="col-start-6 w-25 border-2 gap-2">
+                <div class="w-20 h-20 rounded-full bg-green-500 place-content-center"> <div class=" text-red-600 bold px-7 py-7 text-5xl"><%= username[0].toUpperCase() %></div></div>
+                <h1 class="p-2 px-4 "><%= username %></h1>
+                    <a href="/signout" class="bg-green-500 p-2 py-2 px-4 rounded border-gray-900 m-5">signout</a>
+            </div>
+    </div>
+
+</body>
+
+</html>
