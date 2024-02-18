@@ -1,7 +1,6 @@
 /* eslint-disable no-undef */
-
+const url = Cypress.env('STUDENT_SUBMISSION_URL');
 describe("Todo Application", () => {
-  const url = "http://localhost:3000";
 
   it("should display the homepage", () => {
     cy.visit(url);
