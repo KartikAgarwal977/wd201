@@ -40,7 +40,7 @@ jobs:
           # NODE_ENV=test npx sequelize-cli db:drop
           # NODE_ENV=test npx sequelize-cli db:create
           # NODE_ENV=test npx sequelize-cli db:migrate
-          npm start -- --env=test &
+          npm start:prod &
           sleep 5
       - name: Run integration tests
         run: |
