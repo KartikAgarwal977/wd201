@@ -1,50 +1,75 @@
 name: Auto test L10 solution
 on: push
+
 env:
   PG_DATABASE: database_test
   PG_USER: postgres
-  PG_PASSWORD: kartik
+  PG_PASSWORD: kartik  # Placeholder! Avoid hardcoding credentials in CI/CD
+  APP_DIR: todo-app  # Ensure consistency with potential project layout
+
 jobs:
   run-tests:
     runs-on: ubuntu-latest
+
     services:
       postgres:
         image: postgres:11.7
         env:
           POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: kartik
+          POSTGRES_PASSWORD: postgres  # Use a dedicated, secure password
           POSTGRES_DB: database_test
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
         ports:
           - 5432:5432
+        # Consider using a health check library like `wait-for-postgres`
 
     steps:
       - name: Check out repository code
         uses: actions/checkout@v3
 
       - name: Install dependencies
-        run: cd todo-app && npm install
+        run: cd ${{ env.APP_DIR }} && npm install
 
       - name: Run unit tests
-        run: cd todo-app && npm test
+        run: cd ${{ env.APP_DIR }} && npm test
 
-      - name: Run the app
-        id: run-app
+      - name: Run app and database setup
+        # Combine steps for clarity and efficiency
         run: |
-          cd todo-app
+          cd ${{ env.APP_DIR }}
           npm install
           NODE_ENV=test npx sequelize-cli db:drop
           NODE_ENV=test npx sequelize-cli db:create
           NODE_ENV=test npx sequelize-cli db:migrate
           npm run clean:start &
-          sleep 5
 
-      - name: Run integration tests
+          # Wait for app and database to be ready:
+          export WAIT_TIMEOUT=60  # Customize timeout if needed
+          until curl -sf http://localhost:3000/health >/dev/null 2>&1; do
+            echo "Waiting for app and database..."
+            sleep 5
+            if [[ $WAIT_TIMEOUT -le 0 ]]; then
+              echo "Timed out waiting for app and database!"
+              exit 1
+            fi
+            WAIT_TIMEOUT=$((WAIT_TIMEOUT-5))
+          done
+
+      - name: Run integration tests with Cypress
         run: |
-          cd todo-app
+          cd ${{ env.APP_DIR }}
           npm install cypress cypress-json-results
           npx cypress run --env STUDENT_SUBMISSION_URL="http://localhost:3000/"
+
+      - name: Collect and upload test results
+        run: |
+          # Adapt based on preferred reporting tools or formats
+          npx cypress run --record --reporter json
+          mkdir test-results
+          mv cypress/results/*.json test-results/
+          # Upload test results to a persistent storage service like GitHub Actions artifacts
+          # ...
+
+      - name: Clean up database (optional)
+        run: |
+          cd ${{ env.APP_DIR }}
+          NODE_ENV=test npx sequelize-cli db:drop
