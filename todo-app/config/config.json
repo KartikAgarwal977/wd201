@@ -1,24 +1,24 @@
 {
   "development": {
     "username": "postgres",
-    "password": "sql12",
+    "password": "kartik",
     "database": "database_development",
     "host": "127.0.0.1",
     "dialect": "postgres"
   },
   "test": {
     "username": "postgres",
-    "password": "sql12",
+    "password": "kartik",
     "database": "database_test",
     "host": "127.0.0.1",
     "dialect": "postgres"
   },
-  "repository":{
+  "repository": {
     "type": "git",
-    "url" : "https://github.com/KartikAgarwal977/wd201/tree/main/todo-app"
+    "url": "https://github.com/KartikAgarwal977/wd201/tree/main/todo-app"
   },
   "production": {
-    "use_env_variable" : "database_URL",
+    "use_env_variable": "database_URL",
     "dialect": "postgres"
   }
 }

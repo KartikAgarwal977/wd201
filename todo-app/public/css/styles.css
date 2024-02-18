@@ -1,7 +1,7 @@
-body{
-    background: white;
-    font-family: sans-serif;
+body {
+  background: white;
+  font-family: sans-serif;
 }
-.todos-item :hover .todo-task{
-    display: block;
+.todos-item :hover .todo-task {
+  display: block;
 }

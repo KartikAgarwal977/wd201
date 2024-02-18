@@ -12,11 +12,16 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       todos.belongsTo(models.User, {
-        foreignKey: "userId"
-      })
+        foreignKey: "userId",
+      });
     }
     static addTodo({ title, dueDate, userId }) {
-      return this.create({ title: title, dueDate: dueDate, completed: false, userId });
+      return this.create({
+        title: title,
+        dueDate: dueDate,
+        completed: false,
+        userId,
+      });
     }
 
     setCompletionStatus(status) {
@@ -39,7 +44,7 @@ module.exports = (sequelize, DataTypes) => {
       return await this.findAll({
         where: {
           dueDate: {
-            [Op.lt]: new Date()
+            [Op.lt]: new Date(),
           },
           userId,
           completed: false,
@@ -61,16 +66,16 @@ module.exports = (sequelize, DataTypes) => {
       return await this.findAll({
         where: {
           completed: true,
-          userId
+          userId,
         },
       });
     }
-    static async remove(id,userId) {
+    static async remove(id, userId) {
       return await this.destroy({
         where: {
           id,
-          userId
-        }
+          userId,
+        },
       });
     }
   }

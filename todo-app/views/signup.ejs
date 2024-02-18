@@ -27,20 +27,20 @@
                         <% } %>
                       <% } %>
                 </ul>
-                <form action="/users" method="post">
+                <form action="/users" method="post" name="form">
                     <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                     <div class="block mx-3 px-4 gap-2">
                         <div class="block-auto my-3">
                             <label class="text-sm">First Name</label>
-                            <input class="rounded border-2 text-sm p-2 w-full" type="text" name="FirstName" placeholder="First Name">
+                            <input class="rounded border-2 text-sm p-2 w-full" type="text" name="FirstName" id="firstName" placeholder="First Name">
                         </div>
                         <div class="block-auto my-3">
                             <label class="text-sm">Last Name</label>
-                            <input class="rounded border-2 text-sm p-2 w-full" type="text" name="LastName" placeholder="Last Name">
+                            <input class="rounded border-2 text-sm p-2 w-full" type="text" name="LastName" id="lastName" placeholder="Last Name">
                         </div>
                         <div class="block-auto my-3">
                             <label class="text-sm">Email</label>
-                            <input class="rounded border-2 text-sm p-2 w-full" type="email" name="Email" placeholder="Email">
+                            <input class="rounded border-2 text-sm p-2 w-full" type="email" name="Email" id="email" placeholder="Email">
                         </div>
                         <div class="block-auto my-3">
                             <label class="text-sm">Password</label>
@@ -48,7 +48,7 @@
                         </div>
                         
                         <div class="block-auto w-15 h-10 px-4 my-3">
-                            <button class="rounded px-4 my-3 bg-green-500 text-white border-2 p-2 hover:bg-green-800" type="submit">Sign Up</button>
+                            <input class="rounded px-4 my-3 bg-green-500 text-white border-2 p-2 hover:bg-green-800" type="submit" name="signupbtn">Sign Up</button>
                         </div>
                     </div>
                 </form>
