@@ -27,7 +27,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Install dependencies
-        run: cd todo-app && npm ci
+        run: cd todo-app && npm install
 
       - name: Run unit tests
         run: cd todo-app && npm test
