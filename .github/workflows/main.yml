@@ -16,7 +16,7 @@ jobs:
         image: postgres:11.7
         env:
           POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres  # Use a dedicated, secure password
+          POSTGRES_PASSWORD: kartik  
           POSTGRES_DB: database_test
         ports:
           - 5432:5432
