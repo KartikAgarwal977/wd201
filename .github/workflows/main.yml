@@ -37,9 +37,9 @@ jobs:
         run: |
           cd todo-app
           npm install
-          NODE_ENV=test npx sequelize-cli db:drop
-          NODE_ENV=test npx sequelize-cli db:create
-          NODE_ENV=test npx sequelize-cli db:migrate
+          # NODE_ENV=test npx sequelize-cli db:drop
+          # NODE_ENV=test npx sequelize-cli db:create
+          # NODE_ENV=test npx sequelize-cli db:migrate
           npm start -- --env=test &
           sleep 5
       - name: Run integration tests
