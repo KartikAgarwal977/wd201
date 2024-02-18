@@ -38,7 +38,7 @@ jobs:
           cd todo-app
           npm install
           npx sequelize-cli db:drop
-          npx sequelize-cli db:create
+          npx sequelize-cli db:create --database database_development
           npx sequelize-cli db:migrate
           npm run clean:start &
           sleep 5
