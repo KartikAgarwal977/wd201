@@ -8,18 +8,16 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./todo-app 
 
     steps:
       - name: Checkout repository code
         uses: actions/checkout@v2
 
-      - name: Navigate to repository directory
-        run: cd todo-app
-
       - name: Install dependencies
-        run: |
-          cd todo-app
-          npm install
+        run: npm install
 
       - name: Run linting and code formatting
         run: npm run lint
