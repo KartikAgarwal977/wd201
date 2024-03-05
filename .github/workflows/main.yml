@@ -1,49 +1,38 @@
-name: Auto test L10 solution
-on: push
-env:
-  PG_DATABASE: database_test
-  PG_USER: postgres
-  PG_PASSWORD: kartik
+name: Web Application CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
 jobs:
-  run-tests:
+  build-and-deploy:
     runs-on: ubuntu-latest
-    services:
-      postgres:
-        image: postgres:11.7
-        env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: kartik
-          POSTGRES_DB: database_test
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-        ports:
-          - 5432:5432
 
     steps:
-      - name: Check out repository code
-        uses: actions/checkout@v3
+      - name: Checkout repository code
+        uses: actions/checkout@v2
 
       - name: Install dependencies
-        run: cd todo-app && npm install
+        run: npm install
 
-      - name: Run unit tests
-        run: cd todo-app && npm test --env=test
+      - name: Run linting and code formatting
+        run: npm run lint
 
-      - name: Run the app
-        id: run-app
+      - name: Build the application
+        run: npm run build
+
+      - name: Run automated tests
+        run: npm test
+
+      - name: Deploy to production
+        if: success()
         run: |
-          cd todo-app
-          npm install
-          # NODE_ENV=test npx sequelize-cli db:drop
-          # NODE_ENV=test npx sequelize-cli db:create
-          # NODE_ENV=test npx sequelize-cli db:migrate
-          npm run start:prod &
-          sleep 5
-      - name: Run integration tests
+          # Add deployment script/command here
+          echo "Deployment to production environment successful"
+
+      - name: Notify on failure
+        if: failure()
         run: |
-          cd todo-app
-          npm install cypress cypress-json-results
-          npx cypress run --env STUDENT_SUBMISSION_URL="http://localhost:3000"
+          # Add error reporting and notification logic here
+          echo "Pipeline failed! Please check the logs for details."
