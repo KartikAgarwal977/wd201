@@ -17,7 +17,9 @@ jobs:
         run: cd todo-app
 
       - name: Install dependencies
-        run: cd todo-app & npm install
+        run: |
+          cd todo-app
+          npm install
 
       - name: Run linting and code formatting
         run: npm run lint
