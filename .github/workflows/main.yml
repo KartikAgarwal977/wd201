@@ -46,7 +46,7 @@ jobs:
         if: success()
         run: |
           # Add success 
-          echo "Deploy success! please check the render of status
+          echo "Deploy success! please check the render of status"
 
       - name: Notify on failure
         if: failure()
