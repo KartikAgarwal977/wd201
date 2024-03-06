@@ -46,7 +46,7 @@ jobs:
         if: success()
         run: |
           # Add deployment script/command here
-          echo "Deployment to production environment successful"
+          git push render main
 
       - name: Notify on failure
         if: failure()
