@@ -15,8 +15,8 @@ jobs:
       postgres:
         image: postgres:11.7
         env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: kartik
+          POSTGRES_USER: ${{ secrets.username }}
+          POSTGRES_PASSWORD: ${{ secrets.password }}
           POSTGRES_DB: database_test
         options: >-
           --health-cmd pg_isready
