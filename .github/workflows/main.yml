@@ -41,11 +41,9 @@ jobs:
 
       - name: Install Render CLI
         run: |
-          curl -o render https://render.com/static/render-cli-linux
-          chmod +x render
-          sudo mv render /usr/local/bin/
-          render --version  # Verify installation
-
+          brew tap render-oss/render
+          brew install render
+          render --version
 
       - name: Run automated tests
         run: npm test
