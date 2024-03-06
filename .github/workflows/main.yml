@@ -1,16 +1,22 @@
 name: Web Application CI/CD Pipeline
 
+# Trigger the workflow on push events to the main branch
 on:
   push:
     branches:
       - main
 
 jobs:
+  # Set the runner environment to Ubuntu latest
   build-and-deploy:
     runs-on: ubuntu-latest
+
+    # Set default working directory for all steps
     defaults:
       run:
         working-directory: ./todo-app 
+    
+    # Define PostgreSQL service for use in the workflow
     services:
       postgres:
         image: postgres:11.7
@@ -32,22 +38,26 @@ jobs:
 
       - name: Install dependencies
         run: npm install
-
+      
+      # Run linting and code formatting
       - name: Run linting and code formatting
         run: npm run lint
 
+      # Build the application
       - name: Build the application
         run: npm run build
-
+        
+        # Run automated tests
       - name: Run automated tests
         run: npm test
 
+        # Deploy to production if previous steps succeed
       - name: Deploy to production
         if: success()
         run: |
           # Add success 
           echo "Deploy success! please check the render of status"
-
+        # Notify on failure if any previous steps fail
       - name: Notify on failure
         if: failure()
         run: |
