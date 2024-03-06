@@ -35,13 +35,6 @@ jobs:
 
       - name: Run linting and code formatting
         run: npm run lint
-        
-      - name: Install Render CLI
-        run: |
-          curl -o render https://render.com/static/render-cli-linux
-          chmod +x render
-          sudo mv render /usr/local/bin/
-          render version
 
       - name: Build the application
         run: npm run build
@@ -51,7 +44,7 @@ jobs:
 
       - name: Deploy to production
         if: success()
-        run: render deploy --branch main -- --build-env NODE_ENV=production
+        run: npm run start:prod NODE_ENV=production
 
       - name: Notify on failure
         if: failure()
