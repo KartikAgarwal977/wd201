@@ -205,6 +205,7 @@ app.post("/users", async (req, res) => {
     });
   } catch (error) {
     req.flash("error", "Email already exist");
+    console.log(error);
     return res.redirect("/signup");
   }
 });

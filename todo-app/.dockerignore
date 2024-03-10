@@ -1,0 +1,5 @@
+# Ignore Husky related files
+.husky/
+.huskyrc
+.huskyrc.js
+.husky.config.js
