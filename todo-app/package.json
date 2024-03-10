@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon -e js,ejs",
-    "start:prod": "pm2 start ecosystem.config.js",
+    "start:prod": "pm2 start ecosystem.config.js ",
     "build": "NODE_ENV=test npx sequelize-cli db:drop && NODE_ENV=test npx sequelize-cli db:create",
     "pretest": "NODE_ENV=test npx sequelize-cli db:drop && NODE_ENV=test npx sequelize-cli db:create",
     "lint": "npx lint-staged",
@@ -33,6 +33,7 @@
     "passport-local": "^1.0.0",
     "pg": "^8.11.3",
     "pg-hstore": "^2.3.4",
+    "pm2": "^5.3.1",
     "sequelize": "^6.37.1",
     "tiny-csrf": "^1.1.3"
   },
