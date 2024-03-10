@@ -1,5 +1,6 @@
 const express = require("express");
 const app = express();
+require('dotenv').config();
 const bodyParser = require("body-parser");
 const { todos, User } = require("./models");
 const path = require("path");
@@ -26,7 +27,7 @@ app.use(
 );
 app.use(
   session({
-    secret: "secret-key-874009116946977",
+    secret: process.env.COOKIE_SECRET,
     cookie: {
       maxAge: 1000 * 60 * 60 * 24, // 24 hours
     },
