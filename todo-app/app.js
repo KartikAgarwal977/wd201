@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express();
 require('dotenv').config();
+const helmet = require('helmet');
 const bodyParser = require("body-parser");
 const { todos, User } = require("./models");
 const path = require("path");
@@ -63,6 +64,17 @@ passport.use(
     }
   )
 );
+app.use(helmet());
+app.use(helmet({
+  contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        "script-src": ["'self'", "cdn.tailwindcss.com"],  
+      },
+  },
+}));
+
+
 passport.serializeUser((user, done) => {
   console.log("Serializing user in session", user.id);
   done(null, user.id);

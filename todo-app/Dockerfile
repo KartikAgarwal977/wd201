@@ -1,19 +1,41 @@
-FROM --platform=$BUILDPLATFORM node:lts-alpine as base
+# Use a multi-stage build with specified platform
+FROM --platform=$BUILDPLATFORM node:lts as base
 
 # Set the working directory in the container
 WORKDIR /app
 
-COPY package*.json /
+# Copy package.json and package-lock.json into the container
+COPY package*.json ./
+
+# Expose port 3000
 EXPOSE 3000
 
-FROM  base AS production
-ENV  NODE_ENV=production
-RUN  npm install 
-COPY . /app
-CMD  node index.js
+# Install dependencies
+RUN npm install
 
-FROM base as dev
-ENV NODE_ENV=development
-RUN npm install -g nodemon && npm install 
+# --- Production Stage ---
+FROM base AS production
+
+# Set environment variables
+ENV NODE_ENV=production
+RUN npm install  pm2 -g and pm2 start ecosystem.config.js
+# Copy the rest of the application code
 COPY . /app
-CMD  npm run start
+
+# Command to run the application
+CMD ["node", "index.js"]
+
+# --- Development Stage ---
+FROM base as dev
+
+# Set environment variables
+ENV NODE_ENV=development
+
+# Install nodemon globally and install dependencies
+RUN npm install -g nodemon && npm install 
+
+# Copy the rest of the application code
+COPY . .
+
+# Command to start the development server
+CMD ["npm", "run", "start"]
