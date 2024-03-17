@@ -64,7 +64,7 @@ passport.use(
     }
   )
 );
-app.use(helmet());
+
 app.use(helmet({
   contentSecurityPolicy: {
       directives: {

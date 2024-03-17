@@ -37,5 +37,7 @@ RUN npm install -g nodemon && npm install
 # Copy the rest of the application code
 COPY . .
 
+HEALTHCHECK --interval=1m --timeout=30s --start-period=5s --retries=3 CMD  curl -f http://localhost:3000 || exit 1
+
 # Command to start the development server
 CMD ["npm", "run", "start"]
