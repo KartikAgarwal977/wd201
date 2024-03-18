@@ -1,3 +1,6 @@
 node_modules
 .env
 rbac.json
+build.sh
+service.yaml
+runlocal.sh
