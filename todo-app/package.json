@@ -18,7 +18,8 @@
       "prettier --write ."
     ]
   },
-  
+
+
   "author": "kartik agarwal <kartikag977@gmail.com>",
   "license": "ISC",
   "dependencies": {
