@@ -56,7 +56,14 @@ jobs:
         if: success()
         run: |
           # Add success 
+          az login --service-principal -u ${{ secrets.AZURE_USERNAME }} -p ${{secrets.AZURE_PASSWORD}} --tenant ${{ secrets.AZURE_TENANTID }}
+
+          az account set --subscription ${{ secrets.AZURE_SUBCRIPTION }}
+
+          az webapp deploy ...
+          
           echo "Deploy success! please check the render of status"
+          
         # Notify on failure if any previous steps fail
       - name: Notify on failure
         if: failure()
