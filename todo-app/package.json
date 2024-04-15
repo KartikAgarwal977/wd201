@@ -54,5 +54,6 @@
     "sequelize-cli": "^6.6.2",
     "supertest": "^6.3.3"
   },
+  
   "description": ""
 }
